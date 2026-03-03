@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>List products</title>
+</head>
+<body>
+<div layout:fragment="content" class="container body-content">
+
+    <a th:href="@{/products/create}" class="btn btn-primary mb-3">
+        Create New Product
+    </a>
+
+    <table class="table table-striped">
+        <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Image</th>
+            <th>Category Name</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="product : ${listproduct}">
+            <td th:text="${product.id}"></td>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.price}"></td>
+
+            <!-- IMAGE -->
+            <td>
+                <img th:if="${product.image != null}"
+                     th:src="@{/images/{img}(img=${product.image})}"
+                     width="150"
+                     height="120"
+                     style="object-fit: cover; border-radius: 6px;">
+                <span th:if="${product.image == null}">—</span>
+            </td>
+
+            <td th:text="${product.category != null ? product.category.name : ''}"></td>
+
+            <td>
+                <a th:href="@{/products/edit/{id}(id=${product.id})}"
+                   class="btn btn-secondary btn-sm">Edit</a>
+
+                <form th:action="@{/products/delete/{id}(id=${product.id})}"
+                      method="post"
+                      class="d-inline"
+                      onsubmit="return confirm('Xóa sản phẩm này?');">
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>
